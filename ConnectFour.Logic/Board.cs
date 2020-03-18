@@ -1,10 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data;
 using System.Linq;
 
 namespace ConnectFour.Logic
 {
+    public enum GameState
+    {
+        NotEnded,
+        Draw,
+        PlayerOne,
+        PlayerTwo,
+    }
+
     public class Board
     {
         /// <summary>
@@ -46,15 +53,30 @@ namespace ConnectFour.Logic
         }
 
         /// <summary>
-        /// Checks whether the game is over.
+        /// Returns the result of the game.
         /// </summary>
         /// <returns></returns>
-        public bool IsGameOver()
+        public GameState GetGameState()
         {
-            var playerOneWon = IsTwoDimensionalWinner(1, true)  || IsTwoDimensionalWinner(1, false) || IsDiagonalWinner(1, true) || IsDiagonalWinner(1, false);
-            var playerTwoWon = IsTwoDimensionalWinner(2, true)  || IsTwoDimensionalWinner(2, false) || IsDiagonalWinner(2, true) || IsDiagonalWinner(2, false);
+            var playerOneWon = IsTwoDimensionalWinner(1, true) || IsTwoDimensionalWinner(1, false) || IsDiagonalWinner(1, true) || IsDiagonalWinner(1, false);
+            var playerTwoWon = IsTwoDimensionalWinner(2, true) || IsTwoDimensionalWinner(2, false) || IsDiagonalWinner(2, true) || IsDiagonalWinner(2, false);
 
-            return IsBoardFull() || playerOneWon || playerTwoWon;
+            if (IsBoardFull())
+            {
+                return GameState.Draw;
+            }
+
+            if (playerOneWon)
+            {
+                return GameState.PlayerOne;
+            }
+
+            if (playerTwoWon)
+            {
+                return GameState.PlayerTwo;
+            }
+
+            return GameState.NotEnded;
         }
 
         /// <summary>

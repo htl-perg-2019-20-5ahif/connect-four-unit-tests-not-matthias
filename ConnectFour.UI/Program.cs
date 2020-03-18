@@ -9,19 +9,13 @@ namespace ConnectFour.UI
         {
             Board board = new Board();
 
-            // Set the current player that set the field. 
-            // If the game ends, we know that this player has won.
-            // 
-            var currentPlayer = board.GetCurrentPlayer();
-            
             // Start the game
             //
             do
             {
                 try
                 {
-                    currentPlayer = board.GetCurrentPlayer();
-                    Console.Write($"[+] Player {currentPlayer}: ");
+                    Console.Write($"[+] Player {board.GetCurrentPlayer()}: ");
                     var column = byte.Parse(Console.ReadLine());
 
                     board.AddStone(column);
@@ -32,11 +26,24 @@ namespace ConnectFour.UI
                     continue;
                 }
 
-            } while (!board.IsGameOver());
+            } while (board.GetGameState() == GameState.NotEnded);
 
-            // Display a message for the winner
+            // Parse the game state
             //
-            Console.WriteLine($"\n[ ] Player {currentPlayer} has won!");
+            switch (board.GetGameState())
+            {
+                case GameState.Draw:
+                    Console.WriteLine($"\n[ ] Nobody has won!");
+                    break;
+
+                case GameState.PlayerOne:
+                    Console.WriteLine($"\n[ ] Player 1 has won!");
+                    break;
+
+                case GameState.PlayerTwo:
+                    Console.WriteLine($"\n[ ] Player 2 has won!");
+                    break;
+            }
         }
     }
 }

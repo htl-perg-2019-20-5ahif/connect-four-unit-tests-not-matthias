@@ -46,7 +46,7 @@ namespace ConnectFour.Tests
         {
             var b = new Board();
 
-            Assert.False(b.IsGameOver());
+            Assert.Equal(GameState.NotEnded, b.GetGameState());
         }
 
         [Fact]
